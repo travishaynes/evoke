@@ -1,5 +1,11 @@
 # Evoke
 
+[![GitHub version](https://badge.fury.io/gh/travishaynes%2Fevoke.svg)](http://badge.fury.io/gh/travishaynes%2Fevoke)
+[![Build Status](https://travis-ci.org/travishaynes/evoke.svg)](https://travis-ci.org/travishaynes/evoke)
+[![Code Climate](https://codeclimate.com/github/travishaynes/evoke/badges/gpa.svg)](https://codeclimate.com/github/travishaynes/evoke)
+[![Test Coverage](https://codeclimate.com/github/travishaynes/evoke/badges/coverage.svg)](https://codeclimate.com/github/travishaynes/evoke)
+[![Inline docs](http://inch-ci.org/github/travishaynes/evoke.svg)](http://inch-ci.org/github/travishaynes/evoke)
+
 A lightweight, zero-dependency task tool for Ruby.
 
 ## Installation
