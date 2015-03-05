@@ -7,7 +7,7 @@ module Evoke
     end
 
     def test_class_comment
-      Evoke.load_tasks("test/fixtures/tasks")
+      Evoke.load_tasks("test/fixtures/lib/tasks")
 
       comment = <<-EOF.split("\n").map(&:strip).join("\n")
         This is an example task that is used in testing. It's used to test that

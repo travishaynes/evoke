@@ -26,7 +26,9 @@ module Evoke
 
     # Prints the syntax usage of the task requested by help.
     def syntax
-      task = Evoke.find_task(@arguments[0]) unless @arguments.empty?
+      return usage if @arguments.empty?
+
+      task = Evoke.find_task(@arguments[0])
 
       return unknown_command if task.nil?
 

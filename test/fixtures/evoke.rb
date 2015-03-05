@@ -1,4 +1,4 @@
-before_tasks do |task, *args|
+Evoke.before_task do |task, *args|
   @before_hook = :called
 end
 
@@ -23,5 +23,16 @@ class TaskB < RootTask
 
   def invoke
     @invoked = true
+  end
+end
+
+# This is a task that has two arguments. The first is required, the second is
+# optional and defaults to "optional".
+class ArgumentTest < Evoke::Task
+  attr_reader :req, :opt
+
+  def invoke(req, opt="optional")
+    @req = req
+    @opt = opt
   end
 end
