@@ -28,12 +28,25 @@ module Evoke
 
     # Loads all the Evoke tasks in the supplied path.
     #
+    # @example Loading tasks in the local "lib/tasks" folder.
+    #
+    #     Evoke.load_tasks("lib/tasks")
+    #
+    # @example Loading tasks with an absolute path name.
+    #
+    #     path = File.expand_path("../lib/evoke", __FILE__)
+    #     Evoke.load_tasks(path, false)
+    #
     # @param [String] path The root path that contains the tasks.
-    # @note The path is relative to the file that called #load_tasks.
-    def load_tasks(path)
-      root = File.expand_path("../", caller[0].split(":")[0])
-      search = File.join(root, path, "**", "*_task.rb")
-      Dir[search].each {|f| load f }
+    # @param [Boolean] relative Path is relative to working directory (default).
+    # @return [Array] The files that were loaded.
+    def load_tasks(path, relative=true)
+      if relative
+        path = File.join(Dir.pwd, path)
+        path = File.expand_path(path)
+      end
+
+      Dir[File.join(path, "**", "*_task.rb")].each {|f| load f }
     end
 
     # Adds a code block that will be called before the task is invoked.

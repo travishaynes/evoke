@@ -39,14 +39,6 @@ module Evoke
       @evoke_file = File.join(Dir.pwd, "evoke.rb")
     end
 
-    # Gets the working directory's task directory. This will be in lib/tasks
-    # under the current working directory.
-    #
-    # @return [String] The working directory's tasks.
-    def pwd_tasks
-      @pwd_tasks = File.join(Dir.pwd, "lib", "tasks")
-    end
-
     # Loads the Evoke tasks. This will first search for a file named `evoke.rb`
     # in the current working directory. If one is found it will be loaded. If
     # none is found the default working directory's lib/tasks folder will be
@@ -55,7 +47,7 @@ module Evoke
       return load(evoke_file) if File.file?(evoke_file)
 
       # Load the tasks from the current working directory.
-      Evoke.load_tasks(pwd_tasks)
+      Evoke.load_tasks("lib/tasks")
     end
 
     # Tells the user there are no tasks to invoke and exits with status 1.
