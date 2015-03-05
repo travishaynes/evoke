@@ -16,7 +16,8 @@ module Evoke
       # Prints the syntax usage for this task to the console.
       # @private
       def print_syntax
-        $stdout.puts "Usage: #{name.underscore}" # TODO add parameters
+        params = parameter_names(instance_method(:invoke)).join(' ')
+        $stdout.puts "Usage: #{name.underscore} #{params}"
         $stdout.puts "\n#{syntax}"
       end
 
