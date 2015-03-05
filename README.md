@@ -78,6 +78,43 @@ end
 
 This task would be invoked from the command-line with `evoke math/add A=5 B=10`.
 
+#### Syntax Usage
+
+Using `evoke help` will give the user a more detailed description on how to use
+the task. Providing this description is as easy as adding a comment to the
+task's class. For example:
+
+```ruby
+# This is a completely useless task that allows you to add two numbers together
+# in the console using Evoke, a command-line task tool for Ruby.
+#
+# To use the task provide two integers via `evoke add A B`, where A and B are
+# the integers. For example: `evoke add 1 5` will result in the number 6 being
+# printed to the console. How completely pointless is that?
+#
+# This comment is displayed for this task when you run `evoke help add`.
+class Add < Evoke::Task
+  desc "Prints the sum of two integers."
+
+  def invoke(a, b)
+    puts a.to_i + b.to_i
+  end
+end
+```
+
+Alternately, you can use the #syntax class method:
+
+```ruby
+class Add < Evoke::Task
+  desc "Prints the sum of two integers."
+  syntax "Provide two integers as arguments to this task."
+
+  def invoke
+    puts a.to_i + b.to_i
+  end
+end
+```
+
 ### Loading Tasks
 
 There are two ways tasks can be loaded.
