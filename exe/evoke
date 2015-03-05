@@ -3,5 +3,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'evoke'
+require 'evoke/cli'
 
-# TODO: command-line-interface
+cli = Evoke::CLI.new
+cli.start

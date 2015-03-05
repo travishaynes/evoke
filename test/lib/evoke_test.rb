@@ -15,4 +15,11 @@ class EvokeTest < Minitest::Test
     Evoke.load_tasks("../fixtures/tasks")
     assert Evoke.tasks.include?(Fixtures::ExampleTask)
   end
+
+  def test_find_task
+    Evoke.load_tasks("../fixtures/tasks")
+    task = Evoke.find_task("fixtures/example_task")
+    assert_equal Fixtures::ExampleTask.name, task.name
+    assert_nil Evoke.find_task("not/a_valid/task")
+  end
 end
