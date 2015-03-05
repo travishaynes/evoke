@@ -28,7 +28,9 @@ module Evoke
     def syntax
       return usage if @arguments.empty?
 
-      task = Evoke.find_task(@arguments[0])
+      @command = @arguments.shift
+
+      task = Evoke.find_task(@command)
 
       return unknown_command if task.nil?
 
@@ -75,7 +77,7 @@ module Evoke
 
     # Tells the user that the supplied task could not be found.
     def unknown_command
-      STDERR.puts "No task for #{@command.inspect}"
+      STDERR.puts "No task named #{@command.inspect}"
       exit(1)
     end
 
