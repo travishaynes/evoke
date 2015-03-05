@@ -1,6 +1,6 @@
 # String inflections for converting to CamelCase.
 #
-# Camelizing a string takes all the compound words, separated by an underscore,
+# Camelizing a string takes all the compound words separated by an underscore
 # and combines them together, capitalizing the first letter of each word. It
 # also converts '/' to '::'. For example "hello_world" is camelized to
 # "HelloWorld", and "hello/world" is camelized to "Hello::World".
