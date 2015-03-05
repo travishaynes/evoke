@@ -7,11 +7,11 @@
 module Evoke::Inflections::Camelize
   # Converts a string to CamelCase. It also converts '/' to '::'.
   #
-  # @return [String] The CamelCase string.
   # @example Camelize the string "example/hello_world".
   #
   #     "example/hello_world".camelize # => "Example::HelloWorld"
   #
+  # @return [String] The CamelCase string.
   def camelize
     dup.tap {|s|
       s.capitalize!
