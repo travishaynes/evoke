@@ -42,7 +42,7 @@ module Evoke
     # @private
     def start_index_and_code_lines
       data = read_class_file
-      pos = data =~ /class.*\s*#{simple_name}.*\s*\<\s*Evoke::Task/
+      pos = data =~ /class.*\s*#{simple_name}.*\s*\<.*/
       [data[0..pos].count("\n"), data.split("\n")]
     end
 
