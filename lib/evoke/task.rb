@@ -22,9 +22,9 @@ module Evoke
         @desc = value
       end
 
-      # Ensures that the task's #invoke method has the same amount of arguments as
-      # the user supplied on the command-line. If not, an error message is printed
-      # to STDERR and Evoke is terminated with an exit-status of 1.
+      # Ensures that the task's #invoke method has the same amount of arguments
+      # as the user supplied on the command-line. If not, an error message is
+      # printed to STDERR and Evoke is terminated with an exit-status of 1.
       #
       # @param [Array] arguments The arguments to validate.
       # @return nil if the validation passes.
