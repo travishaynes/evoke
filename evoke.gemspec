@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors = ['Travis Haynes']
   spec.email = ['travis@hi5dev.com']
 
-  spec.summary = 'A build tool for Ruby.'
+  spec.summary = 'A low-profile, zero-dependency command-line task tool for Ruby.'
   spec.license = 'MIT'
 
   spec.files = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
