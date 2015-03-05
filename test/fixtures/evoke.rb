@@ -29,7 +29,7 @@ end
 
 # This is a task that has two arguments. The first is required, the second is
 # optional and defaults to "optional".
-class ArgumentTest < Evoke::Task
+class ArgumentTask < Evoke::Task
   attr_reader :req, :opt
 
   def invoke(req, opt='optional')

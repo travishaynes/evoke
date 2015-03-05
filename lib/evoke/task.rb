@@ -17,7 +17,7 @@ module Evoke
       # @private
       def print_syntax
         params = parameter_names(instance_method(:invoke)).join(' ')
-        $stdout.puts "Usage: #{name.underscore} #{params}"
+        $stdout.puts "Usage: evoke #{name.underscore} #{params}"
         $stdout.puts "\n#{syntax}"
       end
 
