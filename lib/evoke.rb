@@ -9,9 +9,7 @@ module Evoke
     #
     # @return [Array] The task classes.
     def tasks
-      ObjectSpace.each_object(Class).select {|klass|
-        klass < Evoke::Task && klass.instance_methods.include?(:invoke)
-      }
+      ObjectSpace.each_object(Class).select {|klass| klass < Evoke::Task }
     end
 
     # Finds a task with the supplied name.

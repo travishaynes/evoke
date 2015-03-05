@@ -2,8 +2,7 @@ module Evoke
   # The command-line-interface for Evoke.
   class CLI
     def initialize
-      @command = ARGV.shift
-      @task = Evoke.find_task(@command) unless @command.nil?
+      @command = ARGV.shift.dup
       @arguments = ARGV.dup
 
       ARGV.clear
@@ -14,11 +13,13 @@ module Evoke
     def start
       load_tasks
 
-      return no_tasks if tasks.empty?
       return usage if @command.nil?
-      return unknown_command if @task.nil?
 
-      Evoke.invoke(@task, *@arguments)
+      task = Evoke.find_task(@command) unless @command.nil?
+
+      return unknown_command if task.nil?
+
+      Evoke.invoke(task, *@arguments)
     end
 
     # Prints the usage for all the discovered tasks.
@@ -48,6 +49,9 @@ module Evoke
 
       # Load the tasks from the current working directory.
       Evoke.load_tasks("lib/tasks")
+
+      # No reason to continue if there are no tasks to work with.
+      return no_tasks if tasks.empty?
     end
 
     # Tells the user there are no tasks to invoke and exits with status 1.
