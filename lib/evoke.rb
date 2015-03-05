@@ -1,8 +1,9 @@
-require 'evoke/version'
-require 'evoke/task'
-
 module Evoke
+  require 'evoke/version'
   require 'evoke/inflections'
+  require 'evoke/comment'
+  require 'evoke/parameters'
+  require 'evoke/task'
 
   class << self
     # Gets all the classes that descend from Evoke::Task.
@@ -83,7 +84,7 @@ module Evoke
     # @param [Evoke::Task] task The task instance that is being invoked.
     # @param [Array] args The arguments that are being passed to the task.
     def call_before_hooks(task, *args)
-      Array(@before_hooks).each {|hook| hook.call(*args) }
+      Array(@before_hooks).each {|hook| hook.call(task, *args) }
     end
   end
 end

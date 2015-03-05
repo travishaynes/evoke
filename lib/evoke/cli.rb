@@ -15,6 +15,8 @@ module Evoke
 
       return usage if @command.nil?
 
+      return syntax if @command == "help"
+
       task = Evoke.find_task(@command) unless @command.nil?
 
       return unknown_command if task.nil?
@@ -22,9 +24,22 @@ module Evoke
       Evoke.invoke(task, *@arguments)
     end
 
+    # Prints the syntax usage of the task requested by help.
+    def syntax
+      return usage if @arguments.empty?
+
+      @command = @arguments.shift
+
+      task = Evoke.find_task(@command)
+
+      return unknown_command if task.nil?
+
+      task.print_syntax
+    end
+
     # Prints the usage for all the discovered tasks.
     def usage
-      name_col_size = task_names.group_by(&:size).keys.max + 2
+      name_col_size = task_names.group_by(&:size).keys.max.to_i + 2
       tasks.each {|task| task.print_usage(name_col_size) }
 
       exit(2)
@@ -62,7 +77,7 @@ module Evoke
 
     # Tells the user that the supplied task could not be found.
     def unknown_command
-      STDERR.puts "No task for #{@command.inspect}"
+      STDERR.puts "No task named #{@command.inspect}"
       exit(1)
     end
 

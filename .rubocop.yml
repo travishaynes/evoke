@@ -1,0 +1,18 @@
+Style/EmptyLineBetweenDefs:
+  Enabled: false
+
+Style/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Style/EmptyLinesAroundClassBody:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: true
+  Max: 15
+
+Metrics/AbcSize:
+  Enabled: false
