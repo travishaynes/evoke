@@ -2,7 +2,7 @@ module Evoke
   # The command-line-interface for Evoke.
   class CLI
     def initialize
-      @command = ARGV.shift.dup
+      @command = ARGV.shift
       @arguments = ARGV.dup
 
       ARGV.clear
