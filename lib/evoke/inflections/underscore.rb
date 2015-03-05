@@ -8,11 +8,11 @@ module Evoke::Inflections::Underscore
   # Creates an underscored, lowercase form of the string and changes '::' to '/'
   # to convert namespaces to paths.
   #
-  # @return [String] The underscored string.
   # @example Underscoring "Example::HelloWorld".
   #
   #     "Example::HelloWorld" # => "example/hello_world"
   #
+  # @return [String] The underscored string.
   def underscore
     dup.tap {|s|
       s.gsub!(/::/, '/')
