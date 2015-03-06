@@ -4,7 +4,7 @@ module Fixtures
   # Evoke.load_tasks works properly and that Evoke::Comment can extract this
   # comment from the file.
   class ExampleTask < Evoke::Task
-    desc "Prints a friendly message to STDOUT"
+    desc 'Prints a friendly message to STDOUT'
 
     def invoke(message, options=nil)
       puts message

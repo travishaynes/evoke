@@ -3,9 +3,10 @@ module Evoke
   # different purposes.
   module Inflections
     # Load the inflections.
-    Dir[File.expand_path("../inflections/*.rb", __FILE__)].each {|f| require f }
+    inflections_path = File.expand_path('../inflections/*.rb', __FILE__)
+    Dir[inflections_path].each { |f| require f }
 
     # Add the inflections to the String class.
-    constants.each {|i| String.send(:include, const_get(i)) }
+    constants.each { |i| String.send(:include, const_get(i)) }
   end
 end

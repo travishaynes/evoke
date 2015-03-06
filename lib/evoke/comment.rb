@@ -7,9 +7,15 @@ module Evoke
   #     # comment that will be read.
   #     class HelloWorld
   #       extend Evoke::Comment
+  #
+  #       def a_method
+  #         # this won't work without at least one non-inherited method
+  #       end
   #     end
   #
   #     HelloWorld.class_comment # => the multi-line comment before the class
+  #
+  # @note At least one method needs to be present in the class for this to work.
   #
   module Comment
     # Extracts the comment prefixing a class.
