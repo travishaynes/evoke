@@ -16,24 +16,41 @@ module Evoke
     #
     # @return [String] The class' comment.
     def class_comment
-      start_line, lines = start_index_and_code_lines
-
-      comment = []
-
-      (start_line - 1).downto(0).each do |i|
-        line = lines[i].strip
-
-        if line.start_with?('#')
-          comment << line[1..line.length].strip
-        elsif comment != ''
-          break
-        end
-      end
-
-      comment.reverse.join("\n")
+      @class_comment ||= extract_class_comment
     end
 
     private
+
+    # Parses the supplied lines of code into the @class_comment instance
+    # variable.
+    #
+    # @return [String] The multi-line string before the class.
+    def extract_class_comment
+      bottom_line, lines = start_index_and_code_lines
+
+      comment = []
+
+      (bottom_line - 1).downto(0).each do |i|
+        line = parse_comment_line(lines[i])
+        break if line == false
+        comment << line
+      end
+
+      comment.reverse.join("\n").strip
+    end
+
+    # Parses a line of code and extracts the comment if present.
+    #
+    # @param [String] line The line of code to parse.
+    # @return [NilClass] if the line is empty.
+    # @return [Boolean] false if the line is not a comment.
+    # @return [String] The extracted comment, without the prefixed # tag.
+    # @private
+    def parse_comment_line(line)
+      line = line.strip
+      return if line.empty?
+      line.start_with?('#') ? line[1..line.length].strip : false
+    end
 
     # Gets the lines in the class file and the line number that the class is
     # actually defined.
