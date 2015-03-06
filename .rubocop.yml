@@ -10,6 +10,9 @@ Lint/UnusedMethodArgument:
 Style/EmptyLinesAroundClassBody:
   Enabled: false
 
+Style/TrivialAccessors:
+  Enabled: false
+
 Metrics/MethodLength:
   Enabled: true
   Max: 15

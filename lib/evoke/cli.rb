@@ -13,9 +13,9 @@ module Evoke
     def start
       load_tasks
 
+      return no_tasks if tasks.empty?
       return usage if @command.nil?
-
-      return syntax if @command == "help"
+      return syntax if @command == 'help'
 
       task = Evoke.find_task(@command) unless @command.nil?
 
@@ -23,6 +23,8 @@ module Evoke
 
       Evoke.invoke(task, *@arguments)
     end
+
+    private
 
     # Prints the syntax usage of the task requested by help.
     def syntax
@@ -35,24 +37,26 @@ module Evoke
       return unknown_command if task.nil?
 
       task.print_syntax
-    end
-
-    # Prints the usage for all the discovered tasks.
-    def usage
-      name_col_size = task_names.group_by(&:size).keys.max.to_i + 2
-      tasks.each {|task| task.print_usage(name_col_size) }
 
       exit(2)
     end
 
-    private
+    # Prints the usage for all the discovered tasks.
+    def usage
+      grouped_tasks = task_names.group_by(&:size)
+      name_sizes = grouped_tasks.keys
+      biggest_name = name_sizes.max || 0
+      tasks.each { |task| task.print_usage(biggest_name + 2) }
+
+      exit(2)
+    end
 
     # Gets the path for the local evoke.rb file. This doesn't check if the file
     # actually exists, it only returns the location where it might be.
     #
     # @return [String] The path for the evoke file.
     def evoke_file
-      @evoke_file = File.join(Dir.pwd, "evoke.rb")
+      @evoke_file = File.join(Dir.pwd, 'evoke.rb')
     end
 
     # Loads the Evoke tasks. This will first search for a file named `evoke.rb`
@@ -63,21 +67,18 @@ module Evoke
       return load(evoke_file) if File.file?(evoke_file)
 
       # Load the tasks from the current working directory.
-      Evoke.load_tasks("lib/tasks")
-
-      # No reason to continue if there are no tasks to work with.
-      return no_tasks if tasks.empty?
+      Evoke.load_tasks('lib/tasks')
     end
 
     # Tells the user there are no tasks to invoke and exits with status 1.
     def no_tasks
-      STDERR.puts "No tasks found in the current working directory."
+      $stderr.puts 'No tasks found in the current working directory.'
       exit(1)
     end
 
     # Tells the user that the supplied task could not be found.
     def unknown_command
-      STDERR.puts "No task named #{@command.inspect}"
+      $stderr.puts "No task named #{@command.inspect}"
       exit(1)
     end
 
@@ -93,7 +94,7 @@ module Evoke
     #
     # @return [Array] The name of all the tasks.
     def task_names
-      @task_names ||= tasks.map {|task| task.name.underscore }
+      @task_names ||= tasks.map { |task| task.name.underscore }
     end
   end
 end
