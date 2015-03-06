@@ -10,7 +10,7 @@ module Evoke
     #
     # @return [Array] The task classes.
     def tasks
-      ObjectSpace.each_object(Class).select {|klass| klass < Evoke::Task }
+      ObjectSpace.each_object(Class).select { |klass| klass < Evoke::Task }
     end
 
     # Finds a task with the supplied name.
@@ -22,7 +22,7 @@ module Evoke
     #     Evoke.find_task('example/hello_world') # => Example::HelloWorld
     #
     def find_task(name)
-      tasks.find {|task| task.to_s == name.camelize }
+      tasks.find { |task| task.to_s == name.camelize }
     end
 
     # Loads all the Evoke tasks in the supplied path.
@@ -45,7 +45,7 @@ module Evoke
         path = File.expand_path(path)
       end
 
-      Dir[File.join(path, "**", "*_task.rb")].each {|f| load f }
+      Dir[File.join(path, '**', '*_task.rb')].each { |f| load f }
     end
 
     # Adds a code block that will be called before the task is invoked.
@@ -84,7 +84,7 @@ module Evoke
     # @param [Evoke::Task] task The task instance that is being invoked.
     # @param [Array] args The arguments that are being passed to the task.
     def call_before_hooks(task, *args)
-      Array(@before_hooks).each {|hook| hook.call(task, *args) }
+      Array(@before_hooks).each { |hook| hook.call(task, *args) }
     end
   end
 end
