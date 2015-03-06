@@ -21,8 +21,8 @@ module Evoke
 
     private
 
-    # Parses the supplied lines of code into the @class_comment instance
-    # variable.
+    # Reads the class's file and extracts the comment of the class that extends
+    # this module.
     #
     # @return [String] The multi-line string before the class.
     def extract_class_comment
