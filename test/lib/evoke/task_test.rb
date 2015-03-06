@@ -27,6 +27,12 @@ module Evoke
       def invoke(a, b); end
     end
 
+    # Used for testing tasks that have required and optional arguments.
+    class TestTaskWithOptionalArgs < TestTask
+      desc 'A task with two required and three optional arguments.'
+      def invoke(a, b, one='a', two='b', three='c'); end
+    end
+
     # Used for testing tasks that do not have a description.
     class TestTaskNoDesc < TestTask
       def invoke; end
@@ -75,16 +81,30 @@ module Evoke
         "should print the task's name and 'No description.' to STDOUT"
     end
 
+    def test_validate_arguments_with_invalid_argument_size
+      clear_stderr
+      TestTaskWithOptionalArgs.validate_arguments([])
+      assert_equal wrong_args_message(0, 2, 5), $stderr.string.strip
+
+      clear_stderr
+      TestTaskWithOptionalArgs.validate_arguments([1])
+      assert_equal wrong_args_message(1, 2, 5), $stderr.string.strip
+
+      clear_stderr
+      TestTaskWithOptionalArgs.validate_arguments(%w(1 2 3 4 5 6))
+      assert_equal wrong_args_message(6, 2, 5), $stderr.string.strip
+    end
+
     def test_validate_arguments_with_args
       clear_stderr
 
       TestTaskWithArgs.validate_arguments([])
 
-      assert_equal wrong_args_message(2, 0), $stderr.string.strip,
+      assert_equal wrong_args_message(0, 2, 2), $stderr.string.strip,
         'should have written a wrong arguments error message to STDERR'
 
       assert_equal 1, TestTaskWithArgs.exit_code,
-        'shold have exited the application with exit-code 1'
+        'should have exited the application with exit-code 1'
 
       clear_stderr
 
@@ -99,7 +119,7 @@ module Evoke
 
       TestTaskNoArgs.validate_arguments(1)
 
-      assert_equal wrong_args_message(0, 1), $stderr.string.strip,
+      assert_equal wrong_args_message(1, 0, 0), $stderr.string.strip,
         'should have written a wrong arguments error message to STDERR'
 
       assert_equal 1, TestTaskNoArgs.exit_code,
@@ -117,11 +137,13 @@ module Evoke
 
     # Creates a wrong arguments error message.
     #
-    # @param [Integer] e The expected count.
-    # @param [Integer] a The actual count.
+    # @param [Integer] size The size of the arguments supplied.
+    # @param [Integer] min The minimum required arguments.
+    # @param [Integer] max The maximum arguments with all options.
     # @return [String] An error message for failed assertions.
-    def wrong_args_message(e, a)
-      "Wrong number of arguments. Received #{a} instead of #{e}."
+    def wrong_args_message(size, min, max)
+      e = min == max ? min : "#{min}..#{max}"
+      "Wrong number of arguments. Received #{size} instead of #{e}."
     end
 
     # Empties the STDERR buffer.

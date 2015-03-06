@@ -31,7 +31,7 @@ module Evoke
       # @param [String] value The description. Keep it short!
       # @return [String] The supplied description.
       def desc(value)
-        value += "." unless value.end_with?(?.)
+        value += '.' unless value.end_with?('.')
         @desc = value
       end
 
@@ -61,13 +61,17 @@ module Evoke
       # @return nil if the validation passes.
       # @private
       def validate_arguments(arguments)
-        e_size = instance_method(:invoke).arity
-        a_size = Array(arguments).size
+        invoke_method = instance_method(:invoke)
+        min, max = parameter_size(invoke_method)
 
-        return if e_size == a_size
+        size = Array(arguments).size
+        return if size >= min && size <= max
 
-        $stderr.print "Wrong number of arguments. "
-        $stderr.print "Received #{a_size} instead of #{e_size}.\n"
+        e_size = min == max ? min : "#{min}..#{max}"
+
+        $stderr.print 'Wrong number of arguments. '
+        $stderr.print "Received #{size} instead of #{e_size}.\n"
+
         exit(1)
       end
     end

@@ -1,6 +1,18 @@
 module Evoke
   # Extendable module for providing access to method parameters during runtime.
   module Parameters
+    # Finds the minimum and maximum amount of parameters the supplied method
+    # supports.
+    #
+    # @param [UnboundMethod] method The method to check.
+    # @return [Array] The first item is the minimum size, second is the maximum.
+    def parameter_size(method)
+      req_size = required_parameters(method).size
+      opt_size = optional_parameters(method).size
+
+      [req_size, req_size + opt_size]
+    end
+
     # Gets all the required parameters for a method.
     #
     # @param [UnboundMethod] method The method to scan.
