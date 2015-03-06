@@ -19,20 +19,25 @@ A lightweight, zero-dependency task tool for Ruby.
 Evoke tasks are Ruby classes that look like this:
 
 ```ruby
+# Prints a friendly message to the console.
+#
+# This comment actually does something. The first line is used as a short
+# description when `evoke help` or `evoke` is called without any arguments.
+# The rest of the comment is printed, along with the first line, when
+# `evoke help hello_world` is called to pull up help about this specific task.
 class HelloWorld < Evoke::Task
-  # This description appears when your run `evoke` without any arguments.
-  desc "Prints a friendly message"
 
-  # This method is called by Evoke when the task is executed.
+  # The initializer of an Evoke::Task cannot have any required parameters.
+  def initialize
+  end
+
+  # Called when this method is invoked on the command-line. This task would be
+  # invoked using `evoke hello_world`.
   def invoke
     puts "Hello world!"
   end
 end
 ```
-
-**Important:** Initializers for Evoke::Tasks cannot have any required arguments.
-
-This task would be invoked from the command-line with `evoke hello_world`.
 
 #### Namespacing
 
@@ -40,15 +45,19 @@ Tasks are namespaced using modules. Their command names are underscored from
 their Ruby class names. For example, a task named `Example::HelloWorld` would be
 invoked on the command line with `evoke example/hello_world`.
 
-#### Command-line-arguments
+#### Command-Line Arguments
 
 Here's an example of a task that uses command-line arguments and is namespaced.
 
 ```ruby
 module Math
   class Add < Evoke::Task
+    # This can be used as an alternative to providing the short description in
+    # the class comment.
     desc "Adds two integers and prints the result in the console"
 
+    # All parameters come through as strings since they are read from the
+    # arguments supplied on the command-line.
     def invoke(a, b)
       puts a.to_i + b.to_i
     end
@@ -56,19 +65,50 @@ module Math
 end
 ```
 
-**Note:** All arguments come through as strings since they are read from the
-command-line.
-
 This task would be invoked from the command-line with `evoke math/add 5 10`,
 where a=5 and b=10 in this example.
 
-Switches are not currently supported. Use environment variables to use named
-arguments. Here's the same example as above using environment variables:
+#### Optional Arguments
+
+Variable-assigned optional parameters are supported. Key based, `&block` and
+`*` parameters are not and will raise an error.
+
+```ruby
+# SUPPORTED
+def invoke(req, opt='optional argument'); end
+
+# NOT SUPPORTED - errors will be raised
+def invoke(opt: 'optional argument'); end
+def invoke(*args); end
+def invoke(&block); end
+```
+
+
+#### Named Arguments
+
+Environment variables are used for named arguments. Make sure to document the
+required environment variables in the class comment of the task, perhaps even
+including some examples. Normal parameters are displayed in the tasks' help,
+environment variables are not.
+
+Here's an example of the `math/add` task from earlier using named arguments that
+is well documented:
 
 ```ruby
 module Math
+  # Adds two integers and prints the result in the console.
+  #
+  # Two environment variables are required to use this task: A and B.
+  #
+  # == Example: Adding 5 and 10.
+  #
+  #     evoke math/add A=5 B=10
+  #
+  # == Example: Adding 2 and 3.
+  #
+  #     evoke math/add A=2 B=3
+  #
   class Add < Evoke::Task
-    desc "Adds two integers and prints the result in the console"
 
     def initialize
       @a = ENV['A'].to_i
@@ -82,15 +122,15 @@ module Math
 end
 ```
 
-This task would be invoked from the command-line with `evoke math/add A=5 B=10`.
-
-#### Syntax Usage
+#### Documenting Tasks
 
 Using `evoke help` will give the user a more detailed description on how to use
 the task. Providing this description is as easy as adding a comment to the
 task's class. For example:
 
 ```ruby
+# Prints the sum of two integers.
+#
 # This is a completely useless task that allows you to add two numbers together
 # in the console using Evoke, a command-line task tool for Ruby.
 #
@@ -100,17 +140,22 @@ task's class. For example:
 #
 # This comment is displayed for this task when you run `evoke help add`.
 class Add < Evoke::Task
-  desc "Prints the sum of two integers."
-
   def invoke(a, b)
     puts a.to_i + b.to_i
   end
 end
 ```
 
-Alternately, you can use the #syntax class method:
+Alternately, you can use the `#syntax` and `#desc` class methods, which will
+take precedence over the class comment.
 
 ```ruby
+# This class comment will not be used to display help for this task because both
+# the short and long descriptions are provided using #desc and #syntax.
+#
+# If only the #syntax method was used, the first line of this comment would
+# still be used for the short description, and vice-versa. Both methods need to
+# be used to completely disregard this comment.
 class Add < Evoke::Task
   desc "Prints the sum of two integers."
   syntax "Provide two integers as arguments to this task."
