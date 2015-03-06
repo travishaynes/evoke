@@ -13,9 +13,16 @@ Style/EmptyLinesAroundClassBody:
 Style/TrivialAccessors:
   Enabled: false
 
+Style/AlignParameters:
+  Enabled: false
+
 Metrics/MethodLength:
   Enabled: true
   Max: 15
 
 Metrics/AbcSize:
   Enabled: false
+
+Metrics/LineLength:
+  Enabled: true
+  Max: 90

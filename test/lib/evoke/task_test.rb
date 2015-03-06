@@ -1,7 +1,10 @@
 require 'test_helper'
 
 module Evoke
+  # Tests Evoke::Task
   class TaskTest < Minitest::Test
+    # Provides a task that overrides the #exit method so the application doesn't
+    # actually terminate when used in testing.
     class TestTask < Evoke::Task
       class << self
         attr_reader :exit_code
@@ -12,18 +15,26 @@ module Evoke
       end
     end
 
+    # Used for testing tasks with 0 arguments.
     class TestTaskNoArgs < TestTask
-      desc "A test task with no arguments."
+      desc 'A test task with no arguments.'
       def invoke; end
     end
 
+    # Used for testing tasks that has arguments.
     class TestTaskWithArgs < TestTask
-      desc "A test task that has arguments"
+      desc 'A test task that has arguments'
       def invoke(a, b); end
     end
 
+    # Used for testing tasks that do not have a description.
     class TestTaskNoDesc < TestTask
       def invoke; end
+    end
+
+    # Used for testing tasks that use #syntax instead of the class comment.
+    class TestTaskCustomSyntax < TestTask
+      syntax 'A custom syntax'
     end
 
     def setup
@@ -39,10 +50,14 @@ module Evoke
       $stdout = @original_stdout
     end
 
+    def test_custom_syntax
+      assert_equal 'A custom syntax', TestTaskCustomSyntax.syntax
+    end
+
     def test_print_usage
-      m1 = "evoke/task_test/test_task_no_args    # A test task with no arguments."
-      m2 = "evoke/task_test/test_task_with_args  # A test task that has arguments."
-      m3 = "evoke/task_test/test_task_no_desc    # No description."
+      m1 = 'evoke/task_test/test_task_no_args    # A test task with no arguments.'
+      m2 = 'evoke/task_test/test_task_with_args  # A test task that has arguments.'
+      m3 = 'evoke/task_test/test_task_no_desc    # No description.'
 
       clear_stdout
       TestTaskNoArgs.print_usage(37)
@@ -66,17 +81,17 @@ module Evoke
       TestTaskWithArgs.validate_arguments([])
 
       assert_equal wrong_args_message(2, 0), $stderr.string.strip,
-        "should have written a wrong arguments error message to STDERR"
+        'should have written a wrong arguments error message to STDERR'
 
       assert_equal 1, TestTaskWithArgs.exit_code,
-        "shold have exited the application with exit-code 1"
+        'shold have exited the application with exit-code 1'
 
       clear_stderr
 
-      TestTaskWithArgs.validate_arguments(%w[a b])
+      TestTaskWithArgs.validate_arguments(%w(a b))
 
-      assert_equal "", $stderr.string,
-        "should have not written anything to STDERR"
+      assert_equal '', $stderr.string,
+        'should have not written anything to STDERR'
     end
 
     def test_validate_arguments_with_no_args
@@ -85,17 +100,17 @@ module Evoke
       TestTaskNoArgs.validate_arguments(1)
 
       assert_equal wrong_args_message(0, 1), $stderr.string.strip,
-        "should have written a wrong arguments error message to STDERR"
+        'should have written a wrong arguments error message to STDERR'
 
       assert_equal 1, TestTaskNoArgs.exit_code,
-        "should have exited the application with exit-code 1"
+        'should have exited the application with exit-code 1'
 
       clear_stderr
 
       TestTaskNoArgs.validate_arguments([])
 
-      assert_equal "", $stderr.string,
-        "should have not written anything to STDERR"
+      assert_equal '', $stderr.string,
+        'should have not written anything to STDERR'
     end
 
     private
@@ -111,12 +126,12 @@ module Evoke
 
     # Empties the STDERR buffer.
     def clear_stderr
-      $stderr.string = ""
+      $stderr.string = ''
     end
 
     # Empties the STDOUT buffer.
     def clear_stdout
-      $stdout.string = ""
+      $stdout.string = ''
     end
   end
 end
