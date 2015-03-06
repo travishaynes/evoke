@@ -7,3 +7,4 @@ require 'minitest/autorun'
 
 require_relative 'support/fixtures'
 require_relative 'support/output_mocks'
+require_relative 'support/mock_exit'

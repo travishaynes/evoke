@@ -15,14 +15,12 @@ module Evoke
   #
   #     HelloWorld.class_comment # => the multi-line comment before the class
   #
-  # @note At least one method needs to be present in the class for this to work.
-  #
   module Comment
     # Extracts the comment prefixing a class.
-    #
+    # @note At least one non-inherited method needs to be present in the class.
     # @return [String] The class' comment.
     def class_comment
-      @class_comment ||= extract_class_comment
+      @class_comment ||= defined_methods.empty? ? '' : extract_class_comment
     end
 
     private
@@ -91,10 +89,12 @@ module Evoke
     # @return [Array] The source locations of every method in the class.
     # @private
     def defined_methods
-      methods = methods(false).map { |m| method(m) }
-      methods += instance_methods(false).map { |m| instance_method(m) }
-      methods.map!(&:source_location)
-      methods.compact
+      @defined_methods ||= begin
+        methods = methods(false).map { |m| method(m) }
+        methods += instance_methods(false).map { |m| instance_method(m) }
+        methods.map!(&:source_location)
+        methods.compact
+      end
     end
   end
 end

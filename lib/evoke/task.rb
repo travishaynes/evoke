@@ -9,8 +9,11 @@ module Evoke
       # @param [Integer] name_col_size The size of the name column.
       # @private
       def print_usage(name_col_size)
+        description = "#{@desc || class_comment}".split("\n")[0]
+        description ||= 'No description available.'
+
         $stdout.print name.underscore.ljust(name_col_size)
-        $stdout.puts "# #{@desc || 'No description.'}"
+        $stdout.puts "# #{description}"
       end
 
       # Prints the syntax usage for this task to the console.

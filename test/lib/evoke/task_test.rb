@@ -3,43 +3,39 @@ require 'test_helper'
 module Evoke
   # Tests Evoke::Task
   class TaskTest < Minitest::Test
-    # Provides a task that overrides the #exit method so the application doesn't
-    # actually terminate when used in testing.
-    class TestTask < Evoke::Task
-      class << self
-        attr_reader :exit_code
+    # A test task with no arguments.
+    class TestTaskNoArgs < Evoke::Task
+      extend MockExit
 
-        def exit(code)
-          @exit_code = code
-        end
-      end
-    end
-
-    # Used for testing tasks with 0 arguments.
-    class TestTaskNoArgs < TestTask
-      desc 'A test task with no arguments.'
       def invoke; end
     end
 
     # Used for testing tasks that has arguments.
-    class TestTaskWithArgs < TestTask
-      desc 'A test task that has arguments'
+    #
+    # Additionally this class is used to test that the description is read from
+    # the first line of this comment when the #desc class method is not used.
+    class TestTaskWithArgs < Evoke::Task
+      extend MockExit
+
       def invoke(a, b); end
     end
 
     # Used for testing tasks that have required and optional arguments.
-    class TestTaskWithOptionalArgs < TestTask
+    class TestTaskWithOptionalArgs < Evoke::Task
+      extend MockExit
       desc 'A task with two required and three optional arguments.'
       def invoke(a, b, one='a', two='b', three='c'); end
     end
 
-    # Used for testing tasks that do not have a description.
-    class TestTaskNoDesc < TestTask
+    class TestTaskNoDesc < Evoke::Task
+      extend MockExit
+      # Used for testing tasks that do not have a description.
       def invoke; end
     end
 
     # Used for testing tasks that use #syntax instead of the class comment.
-    class TestTaskCustomSyntax < TestTask
+    class TestTaskCustomSyntax < Evoke::Task
+      extend MockExit
       syntax 'A custom syntax'
     end
 
@@ -62,8 +58,8 @@ module Evoke
 
     def test_print_usage
       m1 = 'evoke/task_test/test_task_no_args    # A test task with no arguments.'
-      m2 = 'evoke/task_test/test_task_with_args  # A test task that has arguments.'
-      m3 = 'evoke/task_test/test_task_no_desc    # No description.'
+      m2 = 'evoke/task_test/test_task_with_args  # Used for testing tasks that has arguments.'
+      m3 = 'evoke/task_test/test_task_no_desc    # No description available.'
 
       clear_stdout
       TestTaskNoArgs.print_usage(37)
